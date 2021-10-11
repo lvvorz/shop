@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "core-js": "^3.18.2",
+    "normalize.css": "^8.0.1",
     "vue": "^3.2.20",
+    "vue-loader-v16": "^16.0.0-beta.5.4",
     "vue-router": "^4.0.11",
     "vuex": "^4.0.2"
   },
