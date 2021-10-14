@@ -1,31 +1,34 @@
 <template>
-    <div class="docker">
-      <div class="docker__item docker__item--active">
-        <i class="iconfont">&#xe70e;</i>
-        <div class="docker__title">首页</div>
-      </div>
-      <div class="docker__item">
-        <i class="iconfont">&#xe73d;</i>
-        <div class="docker__title">购物车</div>
-      </div>
-      <div class="docker__item">
-        <i class="iconfont">&#xe897;</i>
-        <div class="docker__title">订单</div>
-      </div>
-      <div class="docker__item">
-        <i class="iconfont">&#xe608;</i>
-        <div class="docker__title">我的</div>
-      </div>
+  <div class="docker">
+    <div
+      v-for="(item, index) in dockerList"
+      :class="{'docker__item': true, 'docker__item--active': index === 0}"
+      class="docker__item"
+      :key="item.index"
+    >
+    <!-- 这里不能用{{item.icon}}   -->
+      <i class="iconfont" v-html="item.icon"></i>
+      <div class="docker__title">{{item.text}}</div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'Docker'
-}
+  name: "Docker",
+  setup() {
+    const dockerList = [
+      { icon: "&#xe70e;", text: "首页" },
+      { icon: "&#xe73d;", text: "购物车" },
+      { icon: "&#xe897;", text: "订单" },
+      { icon: "&#xe608;", text: "我的" },
+    ];
+    return { dockerList };
+  },
+};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../../style/variables.scss";
 @import "../../style/mixin.scss";
 .docker {

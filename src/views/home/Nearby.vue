@@ -1,131 +1,53 @@
 <template>
-    <div class="nearby">
-        <h3 class="nearby__title">附近店辅</h3>
-        <ul>
-          <li class="nearby__item">
-            <img
-              class="nearby__item__img"
-              src="http://www.dell-lee.com/imgs/vue3/near.png"
-              alt=""
-            />
-            <div class="nearby__content">
-              <div class="nearby__content__title">沃尔玛</div>
-              <div class="nearby__content__tags">
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-              </div>
-              <p class="nearby__content__hightlight">VIP尊享满89元减4元运费</p>
+  <div class="nearby">
+    <h3 class="nearby__title">附近店辅</h3>
+    <ul>
+      <li class="nearby__item" v-for="item in nearbyList" :key="item.id">
+        <img class="nearby__item__img" :src="item.imgUrl" alt="" />
+        <div class="nearby__content">
+          <div class="nearby__content__title">{{ item.title }}</div>
+          <div class="nearby__content__tags">
+            <div
+              class="nearby__content__tag"
+              v-for="(innerItem, innerIndex) in item.tags"
+              :key="innerIndex"
+            >
+              {{ innerItem }}
             </div>
-          </li>
-          <li class="nearby__item">
-            <img
-              class="nearby__item__img"
-              src="http://www.dell-lee.com/imgs/vue3/near.png"
-              alt=""
-            />
-            <div class="nearby__content">
-              <div class="nearby__content__title">沃尔玛</div>
-              <div class="nearby__content__tags">
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-              </div>
-              <p class="nearby__content__hightlight">VIP尊享满89元减4元运费</p>
-            </div>
-          </li>
-          <li class="nearby__item">
-            <img
-              class="nearby__item__img"
-              src="http://www.dell-lee.com/imgs/vue3/near.png"
-              alt=""
-            />
-            <div class="nearby__content">
-              <div class="nearby__content__title">沃尔玛</div>
-              <div class="nearby__content__tags">
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-              </div>
-              <p class="nearby__content__hightlight">VIP尊享满89元减4元运费</p>
-            </div>
-          </li>
-          <li class="nearby__item">
-            <img
-              class="nearby__item__img"
-              src="http://www.dell-lee.com/imgs/vue3/near.png"
-              alt=""
-            />
-            <div class="nearby__content">
-              <div class="nearby__content__title">沃尔玛</div>
-              <div class="nearby__content__tags">
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-              </div>
-              <p class="nearby__content__hightlight">VIP尊享满89元减4元运费</p>
-            </div>
-          </li>
-          <li class="nearby__item">
-            <img
-              class="nearby__item__img"
-              src="http://www.dell-lee.com/imgs/vue3/near.png"
-              alt=""
-            />
-            <div class="nearby__content">
-              <div class="nearby__content__title">沃尔玛</div>
-              <div class="nearby__content__tags">
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-              </div>
-              <p class="nearby__content__hightlight">VIP尊享满89元减4元运费</p>
-            </div>
-          </li>
-          <li class="nearby__item">
-            <img
-              class="nearby__item__img"
-              src="http://www.dell-lee.com/imgs/vue3/near.png"
-              alt=""
-            />
-            <div class="nearby__content">
-              <div class="nearby__content__title">沃尔玛</div>
-              <div class="nearby__content__tags">
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-              </div>
-              <p class="nearby__content__hightlight">VIP尊享满89元减4元运费</p>
-            </div>
-          </li>
-          <li class="nearby__item">
-            <img
-              class="nearby__item__img"
-              src="http://www.dell-lee.com/imgs/vue3/near.png"
-              alt=""
-            />
-            <div class="nearby__content">
-              <div class="nearby__content__title">沃尔玛</div>
-              <div class="nearby__content__tags">
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-                <div class="nearby__content__tag">月销1万+</div>
-              </div>
-              <p class="nearby__content__hightlight">VIP尊享满89元减4元运费</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-    
+          </div>
+          <p class="nearby__content__hightlight">{{ item.desc }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 export default {
   name: "Nearby",
+  setup() {
+    const nearbyList = [
+      {
+        id: 1,
+        imgUrl: "http://www.dell-lee.com/imgs/vue3/near.png",
+        title: "沃尔玛",
+        tags: ["月销1万+", "起送0元", "基础运费5元"],
+        desc: "VIP尊享满89元减4元运费（每月3张）",
+      },
+      {
+        id: 2,
+        imgUrl: "http://www.dell-lee.com/imgs/vue3/near.png",
+        title: "沃尔玛",
+        tags: ["月销1万+", "起送0元", "基础运费5元"],
+        desc: "VIP尊享满89元减4元运费（每月3张）",
+      },
+    ];
+    return { nearbyList };
+  },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../../style/variables.scss";
 @import "../../style/mixin.scss";
 .nearby {
