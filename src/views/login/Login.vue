@@ -6,31 +6,75 @@
       class="wrap__logo"
     />
     <div class="wrap__input">
-      <input type="text" class="wrap__input__content" />
+      <input
+        type="text"
+        class="wrap__input__content"
+        placeholder="请输入用户名"
+        v-model="data.username"
+      />
     </div>
     <div class="wrap__input">
-      <input type="text" class="wrap__input__content" />
+      <input
+        type="text"
+        class="wrap__input__content"
+        placeholder="请输入密码"
+        v-model="data.password"
+      />
     </div>
-    <div class="wrap__login">登陆</div>
-    <div class="wrap__link">立即注册</div>
+    <div class="wrap__login" @click="handleLogin">登陆</div>
+    <div class="wrap__link" @click="handleRegister">立即注册</div>
   </div>
 </template>
 
 <script>
+import { useRouter } from "vue-router";
+import { reactive } from "vue";
+import { post } from "../../../src/utils/request";
+
+
 export default {
   name: "Login",
+  setup() {
+    const data = reactive({
+      username: "",
+      password: "",
+    });
+    //获取router实例
+    const router = useRouter();
+    const handleLogin = async () => {
+      try {
+        const result = await post("/api/user/login", {
+          username: data.username,
+          password: data.password,
+        });
+        if (result?.errno === 0) {
+          localStorage.isLogin = true;
+          router.push({ name: "Home" });
+        } else {
+          alert("登陆失败");
+        }
+      } catch (e) {
+        alert("请求失败");
+      }
+    };
+    const handleRegister = () => {
+      router.push({ name: "Register" });
+    };
+
+    return { handleLogin, handleRegister, data };
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../style/variables.scss';
+@import "../../style/variables.scss";
 .wrap {
   position: absolute;
   top: 50%;
   left: 0;
   right: 0;
   transform: translateY(-50%);
-  &__logo{
+  &__logo {
     margin: 0 auto 0.3rem auto;
     width: 0.66rem;
     height: 0.66rem;
@@ -55,7 +99,7 @@ export default {
   }
 
   &__login {
-    margin: 0.32rem 0.4rem .16rem 0.4rem;
+    margin: 0.32rem 0.4rem 0.16rem 0.4rem;
     line-height: 0.48rem;
     background: #0091ff;
     box-shadow: 0 0.04rem 0.08rem 0 rgba(0, 145, 255, 0.32);
