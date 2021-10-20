@@ -6,44 +6,103 @@
       class="wrap__logo"
     />
     <div class="wrap__input">
-      <input type="text" class="wrap__input__content" placeholder="请输入手机号" />
+      <input
+        type="text"
+        class="wrap__input__content"
+        placeholder="请输入手机号"
+        v-model="username"
+      />
     </div>
     <div class="wrap__input">
-      <input type="text" class="wrap__input__content" placeholder="请输入密码" />
+      <input
+        type="text"
+        class="wrap__input__content"
+        placeholder="请输入密码"
+        v-model="password"
+      />
     </div>
     <div class="wrap__input">
-      <input type="text" class="wrap__input__content" placeholder="请再次输入密码"/>
+      <input
+        type="text"
+        class="wrap__input__content"
+        placeholder="请再次输入密码"
+        v-model="ensurement"
+      />
     </div>
     <div class="wrap__register" @click="handleRegister">注册</div>
     <div class="wrap__link" @click="handleLogin">已有帐号去登陆</div>
+    <toast v-if="show" :msg="toastMsg" />
   </div>
 </template>
 
 <script>
-import {useRouter} from 'vue-router';
+import { useRouter } from "vue-router";
+import { reactive, toRefs } from "vue";
+import { post } from "../../../src/utils/request";
+import Toast, { useToastEffect } from "../../components/Toast.vue";
+
+const useRegisterEffect = (showToast) => {
+  const router = useRouter();
+  const data = reactive({
+    username: "",
+    password: "",
+    ensurement: "",
+  });
+  const handleRegister = async () => {
+    try {
+      const result = await post("/api/user/login", {
+        username: data.username,
+        password: data.password,
+      });
+      if (result?.errno === 0) {
+        router.push({ name: "Login" });
+      } else {
+        showToast("注册失败");
+      }
+    } catch (e) {
+      showToast("请求失败");
+    }
+  };
+  //对data数据进行解构
+  const { username, password, ensurement } = toRefs(data);
+  return { username, password, ensurement, handleRegister };
+};
+
 export default {
   name: "Register",
+  components: { Toast },
   setup() {
-    const router = useRouter()
+    const router = useRouter();
+    const { show, toastMsg, showToast } = useToastEffect();
+    const { username, password, ensurement, handleRegister } =
+      useRegisterEffect(showToast);
+
     const handleLogin = () => {
-      router.push({name: 'Login'})
-    }
-    const handleRegister = () => {}
-    return {handleLogin, handleRegister}
-  }
-  
+      router.push({ name: "Login" });
+    };
+
+    return {
+      handleLogin,
+      handleRegister,
+      show,
+      toastMsg,
+      username,
+      password,
+      ensurement,
+    };
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../../style/variables.scss';
+@import "../../style/variables.scss";
 .wrap {
   position: absolute;
   top: 50%;
   left: 0;
   right: 0;
   transform: translateY(-50%);
-  &__logo{
+  &__logo {
     margin: 0 auto 0.3rem auto;
     width: 0.66rem;
     height: 0.66rem;
@@ -68,7 +127,7 @@ export default {
   }
 
   &__register {
-    margin: 0.32rem 0.4rem .16rem 0.4rem;
+    margin: 0.32rem 0.4rem 0.16rem 0.4rem;
     line-height: 0.48rem;
     background: #0091ff;
     box-shadow: 0 0.04rem 0.08rem 0 rgba(0, 145, 255, 0.32);

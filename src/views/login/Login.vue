@@ -10,7 +10,7 @@
         type="text"
         class="wrap__input__content"
         placeholder="请输入用户名"
-        v-model="data.username"
+        v-model="username"
       />
     </div>
     <div class="wrap__input">
@@ -18,50 +18,60 @@
         type="text"
         class="wrap__input__content"
         placeholder="请输入密码"
-        v-model="data.password"
+        v-model="password"
       />
     </div>
     <div class="wrap__login" @click="handleLogin">登陆</div>
     <div class="wrap__link" @click="handleRegister">立即注册</div>
+    <toast v-if="show" :msg="toastMsg" />
   </div>
 </template>
 
 <script>
+import { reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
-import { reactive } from "vue";
 import { post } from "../../../src/utils/request";
+import Toast, { useToastEffect } from "../../components/Toast.vue";
 
+const useLoginEffect = (showToast) => {
+  const router = useRouter();
+  const data = reactive({
+    username: "",
+    password: "",
+  });
+  const handleLogin = async () => {
+    try {
+      const result = await post("/api/user/login", {
+        username: data.username,
+        password: data.password,
+      });
+      if (result?.errno === 0) {
+        localStorage.isLogin = true;
+        router.push({ name: "Home" });
+      } else {
+        showToast("登陆失败");
+      }
+    } catch (e) {
+      showToast("请求失败");
+    }
+  };
+  //对data数据进行解构
+  const { username, password } = toRefs(data);
+  return { username, password, handleLogin }
+};
 
 export default {
   name: "Login",
+  components: { Toast },
   setup() {
-    const data = reactive({
-      username: "",
-      password: "",
-    });
-    //获取router实例
+    const { show, toastMsg, showToast } = useToastEffect();
+    const { username, password, handleLogin } = useLoginEffect(showToast);
     const router = useRouter();
-    const handleLogin = async () => {
-      try {
-        const result = await post("/api/user/login", {
-          username: data.username,
-          password: data.password,
-        });
-        if (result?.errno === 0) {
-          localStorage.isLogin = true;
-          router.push({ name: "Home" });
-        } else {
-          alert("登陆失败");
-        }
-      } catch (e) {
-        alert("请求失败");
-      }
-    };
     const handleRegister = () => {
       router.push({ name: "Register" });
     };
 
-    return { handleLogin, handleRegister, data };
+    return { handleLogin, handleRegister, username, password, show, toastMsg };
   },
 };
 </script>

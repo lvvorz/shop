@@ -46,7 +46,7 @@ const router = createRouter({
 // 每次路由进行切换都进行校验
 router.beforeEach((to, before, next) => {
   const { isLogin } = localStorage; 
-  //每次跳转验证，若没登陆则跳到登陆
+  //每次跳转验证，若没登陆则跳到登陆 
   if(!isLogin && (to.name !== 'Login' && to.name !== 'Register')) {
     next({ name: 'Login' })
   } else {
