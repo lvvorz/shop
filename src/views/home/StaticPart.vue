@@ -85,8 +85,8 @@ export default {
 .search {
   margin-bottom: 0.12rem;
   line-height: 0.32rem;
-  background: #f5f5f5;
-  color: #b7b7b7;
+  background: $search-bgColor;
+  color: $search-fontColor;
   border-radius: 0.16rem;
   .iconfont {
     position: relative;
@@ -97,10 +97,10 @@ export default {
   .search__input {
     display: inline-block;
     font-size: 0.14rem;
-    background: #f5f5f5;
+    background: $search-bgColor;
   }
   input::-webkit-input-placeholder {
-    color: #b7b7b7;
+    color: $search-fontColor;
   }
 }
 
