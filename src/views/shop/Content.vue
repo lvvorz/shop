@@ -18,10 +18,7 @@
     <div class="product">
       <ul>
         <li class="product__item" v-for="item in list" :key="item._id">
-          <img
-            class="product__item__img"
-            src="http://www.dell-lee.com/imgs/vue3/near.png"
-          />
+          <img class="product__item__img" :src="item.imgUrl" />
           <div class="product__item__detail">
             <h4 class="product__item__title">{{ item.name }}</h4>
             <p class="product__item__sales">月售{{ item.sales }}件</p>
@@ -33,9 +30,25 @@
             </p>
           </div>
           <div class="product__number">
-            <i class="product__number__minus">-</i>
-            0
-            <i class="product__number__plus">+</i>
+            <i
+              class="product__number__minus"
+              @click="
+                () => {
+                  changeCartInfo(shopId, item._id, item, -1);
+                }
+              "
+              >-</i
+            >
+            {{ cartList?.[shopId]?.[item._id]?.count || 0 }}
+            <i
+              class="product__number__plus"
+              @click="
+                () => {
+                  changeCartInfo(shopId, item._id, item, 1);
+                }
+              "
+              >+</i
+            >
           </div>
         </li>
       </ul>
@@ -47,6 +60,7 @@
 import { reactive, toRefs, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { get } from "../../utils/request";
+import { commonCartEffect } from "./CommonCartEffect.js";
 
 const categories = [
   {
@@ -74,9 +88,7 @@ const useTabEffect = () => {
 };
 
 //获取列表数据相关
-const useCurrentListEffect = (currentTab) => {
-  const route = useRoute();
-  const shopId = route.params.id;
+const useCurrentListEffect = (currentTab, shopId) => {
   const content = reactive({ list: [] });
 
   const getContentData = async () => {
@@ -100,9 +112,20 @@ const useCurrentListEffect = (currentTab) => {
 export default {
   name: "Content",
   setup() {
+    const route = useRoute();
+    const shopId = route.params.id;
     const { currentTab, hadleTabClick } = useTabEffect();
-    const { list } = useCurrentListEffect(currentTab);
-    return { list, categories, hadleTabClick, currentTab };
+    const { list } = useCurrentListEffect(currentTab, shopId);
+    const { changeCartInfo, cartList } = commonCartEffect();
+    return {
+      list,
+      categories,
+      hadleTabClick,
+      currentTab,
+      shopId,
+      changeCartInfo,
+      cartList
+    };
   },
 };
 </script>
