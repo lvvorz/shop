@@ -34,17 +34,17 @@
               class="product__number__minus"
               @click="
                 () => {
-                  changeCartInfo(shopId, item._id, item, -1);
+                  changeCartItem(shopId, item._id, item, -1, shopName);
                 }
               "
               >-</i
             >
-            {{ cartList?.[shopId]?.[item._id]?.count || 0 }}
+            {{ cartList?.[shopId]?.productList?.[item._id]?.count || 0 }}
             <i
               class="product__number__plus"
               @click="
                 () => {
-                  changeCartInfo(shopId, item._id, item, 1);
+                  changeCartItem(shopId, item._id, item, 1, shopName);
                 }
               "
               >+</i
@@ -59,6 +59,7 @@
 <script>
 import { reactive, toRefs, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 import { get } from "../../utils/request";
 import { commonCartEffect } from "./CommonCartEffect.js";
 
@@ -109,22 +110,44 @@ const useCurrentListEffect = (currentTab, shopId) => {
   return { list };
 };
 
+//购物车相关
+const useCartEffect = () => {
+  const store = useStore();
+  const { changeCartInfo, cartList } = commonCartEffect();
+
+  const changeShopName = (shopId, shopName) => {
+    store.commit("changeShopName", {
+      shopId,
+      shopName,
+    });
+  };
+
+  const changeCartItem = (shopId, productId, item, num, shopName) => {
+    changeCartInfo(shopId, productId, item, num);
+    changeShopName(shopId, shopName);
+  };
+
+  return { cartList, changeCartItem };
+};
+
 export default {
   name: "Content",
+  props: ["shopName"],
   setup() {
     const route = useRoute();
     const shopId = route.params.id;
     const { currentTab, hadleTabClick } = useTabEffect();
     const { list } = useCurrentListEffect(currentTab, shopId);
-    const { changeCartInfo, cartList } = commonCartEffect();
+    const { cartList, changeCartItem } = useCartEffect();
+
     return {
       list,
       categories,
       hadleTabClick,
       currentTab,
       shopId,
-      changeCartInfo,
-      cartList
+      changeCartItem,
+      cartList,
     };
   },
 };

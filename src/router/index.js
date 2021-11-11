@@ -8,6 +8,12 @@ const routes = [
     component: () => import('../views/home/Home')
   },
   {
+    path: '/cartList',
+    name: 'CartList',
+    // 异步加载
+    component: () => import('../views/cartList/CartList')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/login/Login'),
