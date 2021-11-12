@@ -1,7 +1,11 @@
 <template>
-  <div class="mask" v-if="showCart && total > 0" @click="toggleCartShow" />
+  <div
+    class="mask"
+    v-if="showCart && calculations.total > 0"
+    @click="toggleCartShow"
+  />
   <div class="cart">
-    <div class="product" v-if="showCart && total > 0">
+    <div class="product" v-if="showCart && calculations.total > 0">
       <div class="product__header">
         <div
           class="product__header__all"
@@ -9,7 +13,7 @@
         >
           <i
             class="product__header__icon iconfont"
-            v-html="allChecked ? '&#xe70f;' : '&#xe616;'"
+            v-html="calculations.allChecked ? '&#xe70f;' : '&#xe616;'"
           ></i>
           全选
         </div>
@@ -72,13 +76,17 @@
           class="check__icon__img"
           @click="toggleCartShow"
         />
-        <i class="check__icon__tag">{{ total }}</i>
+        <i class="check__icon__tag">{{ calculations.total }}</i>
       </div>
       <div class="check__info">
-        总计：<span class="check__info__price">&yen; {{ price }}</span>
+        总计：<span class="check__info__price"
+          >&yen; {{ calculations.price }}</span
+        >
       </div>
       <div class="check__btn">
-        <router-link :to="{ path: `/orderConfirm/${shopId}`}">去结算</router-link>
+        <router-link :to="{ path: `/orderConfirm/${shopId}` }"
+          >去结算</router-link
+        >
       </div>
     </div>
   </div>
@@ -98,43 +106,22 @@ const useCartEffect = (shopId) => {
 
   const cartList = store.state.cartList;
 
-  const total = computed(() => {
+  const calculations = computed(() => {
     const productList = cartList[shopId]?.productList;
-    let count = 0;
+    const result = { total: 0, price: 0, allChecked: true };
     if (productList) {
       for (let i in productList) {
         const product = productList[i];
-        count += product.count;
-      }
-    }
-    return count;
-  });
-
-  const price = computed(() => {
-    const productList = cartList[shopId]?.productList;
-    let count = 0;
-    if (productList) {
-      for (let i in productList) {
-        const product = productList[i];
+        result.total += product.count;
         if (product.check) {
-          count += product.count * product.price;
+          result.price += product.count * product.price;
         }
-      }
-    }
-    return (count = count.toFixed(2));
-  });
-
-  const allChecked = computed(() => {
-    const productList = cartList[shopId].productList;
-    let result = true;
-    if (productList) {
-      for (let i in productList) {
-        const product = productList[i];
         if (product.count > 0 && !product.check) {
-          result = false;
+          result.allChecked = false;
         }
       }
     }
+    result.price = result.price.toFixed(2);
     return result;
   });
 
@@ -151,13 +138,11 @@ const useCartEffect = (shopId) => {
   };
 
   return {
-    total,
-    price,
+    calculations,
     productList,
     changeCartInfo,
     changeCartChecked,
     clearCartProducts,
-    allChecked,
     setCartAllChecked,
   };
 };
@@ -176,29 +161,24 @@ export default {
   setup() {
     const route = useRoute();
     const shopId = route.params.id;
-
     const {
-      total,
-      price,
+      calculations,
       productList,
       changeCartInfo,
       changeCartChecked,
       clearCartProducts,
-      allChecked,
       setCartAllChecked,
     } = useCartEffect(shopId);
 
     const { showCart, toggleCartShow } = toggleCartEffect();
 
     return {
-      total,
-      price,
+      calculations,
       productList,
       shopId,
       changeCartInfo,
       clearCartProducts,
       changeCartChecked,
-      allChecked,
       setCartAllChecked,
       showCart,
       toggleCartShow,
