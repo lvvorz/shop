@@ -93,37 +93,16 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { commonCartEffect } from "../../effects/cartEffects";
 
 //获取购物车信息逻辑
 const useCartEffect = (shopId) => {
-  const { changeCartInfo, productList } = commonCartEffect(shopId);
+  const { changeCartInfo, productList, calculations } = commonCartEffect(shopId);
 
   const store = useStore();
-
-  const cartList = store.state.cartList;
-
-  const calculations = computed(() => {
-    const productList = cartList[shopId]?.productList;
-    const result = { total: 0, price: 0, allChecked: true };
-    if (productList) {
-      for (let i in productList) {
-        const product = productList[i];
-        result.total += product.count;
-        if (product.check) {
-          result.price += product.count * product.price;
-        }
-        if (product.count > 0 && !product.check) {
-          result.allChecked = false;
-        }
-      }
-    }
-    result.price = result.price.toFixed(2);
-    return result;
-  });
 
   const changeCartChecked = (shopId, productId) => {
     store.commit("changeCartChecked", { shopId, productId });
