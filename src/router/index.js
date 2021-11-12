@@ -14,6 +14,12 @@ const routes = [
     component: () => import('../views/cartList/CartList')
   },
   {
+    path: '/orderConfirm/:id',
+    name: 'OrderConfirm',
+    // 异步加载
+    component: () => import('../views/orderConfirm/OrderConfirm')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/login/Login'),

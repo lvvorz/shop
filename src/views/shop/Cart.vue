@@ -78,7 +78,7 @@
         总计：<span class="check__info__price">&yen; {{ price }}</span>
       </div>
       <div class="check__btn">
-        <router-link :to="{ name: 'Home' }">去结算</router-link>
+        <router-link :to="{ path: `/orderConfirm/${shopId}`}">去结算</router-link>
       </div>
     </div>
   </div>
@@ -88,11 +88,11 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { commonCartEffect } from "./CommonCartEffect";
+import { commonCartEffect } from "../../effects/cartEffects";
 
 //获取购物车信息逻辑
 const useCartEffect = (shopId) => {
-  const { changeCartInfo } = commonCartEffect();
+  const { changeCartInfo, productList } = commonCartEffect(shopId);
 
   const store = useStore();
 
@@ -136,11 +136,6 @@ const useCartEffect = (shopId) => {
       }
     }
     return result;
-  });
-
-  const productList = computed(() => {
-    const productList = cartList[shopId]?.productList || [];
-    return productList;
   });
 
   const changeCartChecked = (shopId, productId) => {
