@@ -2,7 +2,7 @@
   <div
     class="mask"
     v-if="showCart && calculations.total > 0"
-    @click="toggleCartShow"
+    @click.stop="toggleCartShow"
   />
   <div class="cart">
     <div class="product" v-if="showCart && calculations.total > 0">
@@ -27,7 +27,7 @@
       </div>
       <ul>
         <template v-for="item in productList" :key="item._id">
-          <li class="product__item" v-if="item.count > 0">
+          <li class="product__item">
             <i
               class="product__item__checked iconfont"
               v-html="item.check ? '&#xe70f;' : '&#xe616;'"
@@ -83,7 +83,7 @@
           >&yen; {{ calculations.price }}</span
         >
       </div>
-      <div class="check__btn">
+      <div class="check__btn" v-show="calculations.total">
         <router-link :to="{ path: `/orderConfirm/${shopId}` }"
           >去结算</router-link
         >
@@ -100,7 +100,8 @@ import { commonCartEffect } from "../../effects/cartEffects";
 
 //获取购物车信息逻辑
 const useCartEffect = (shopId) => {
-  const { changeCartInfo, productList, calculations } = commonCartEffect(shopId);
+  const { changeCartInfo, productList, calculations } =
+    commonCartEffect(shopId);
 
   const store = useStore();
 
