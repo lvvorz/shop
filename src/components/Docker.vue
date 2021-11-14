@@ -6,7 +6,7 @@
       class="docker__item"
       :key="item.index"
     >
-      <!-- 这里不能用{{item.icon}}   -->
+      <!-- 这里不能用{{item.icon}} 使用v-html  -->
       <router-link :to="item.to">
         <i class="iconfont" v-html="item.icon"></i>
         <div class="docker__title">{{ item.text }}</div>

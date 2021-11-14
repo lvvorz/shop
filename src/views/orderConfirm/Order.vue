@@ -31,6 +31,7 @@
       </div>
     </div>
   </div>
+  <Toast v-if="show" :msg="toastMsg" />
 </template>
 
 <script>
@@ -39,11 +40,13 @@ import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { post } from "../../utils/request";
 import { commonCartEffect } from "../../effects/cartEffects";
+import Toast, { useToastEffect } from "../../components/Toast.vue";
 
 // 下单相关逻辑
 const useMakeOrderEffect = (shopId, shopName, productList) => {
   const router = useRouter();
   const store = useStore();
+  const { show, toastMsg, showToast } = useToastEffect();
 
   const handleConfirmOrder = async (isCanceled) => {
     const products = [];
@@ -64,10 +67,11 @@ const useMakeOrderEffect = (shopId, shopName, productList) => {
         router.push({ name: "OrderList" });
       }
     } catch (e) {
-      alert("下单失败");
+      showToast(toastMsg);
+      console.log(toastMsg);
     }
   };
-  return { handleConfirmOrder };
+  return { handleConfirmOrder, show, toastMsg };
 };
 
 // 蒙层展示相关的逻辑
@@ -81,11 +85,13 @@ const useShowMaskEffect = () => {
 
 export default {
   name: "Order",
+  components: { Toast },
+
   setup() {
     const route = useRoute();
     const shopId = parseInt(route.params.id, 10);
     const { calculations, shopName, productList } = commonCartEffect(shopId);
-    const { handleConfirmOrder } = useMakeOrderEffect(
+    const { handleConfirmOrder, show, toastMsg } = useMakeOrderEffect(
       shopId,
       shopName,
       productList
@@ -96,6 +102,8 @@ export default {
       handleShowConfirmChange,
       calculations,
       handleConfirmOrder,
+      show,
+      toastMsg,
     };
   },
 };

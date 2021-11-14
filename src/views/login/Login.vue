@@ -15,7 +15,7 @@
     </div>
     <div class="wrap__input">
       <input
-        type="text"
+        type="password"
         class="wrap__input__content"
         placeholder="请输入密码"
         v-model="password"
