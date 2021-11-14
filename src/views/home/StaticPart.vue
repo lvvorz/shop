@@ -136,8 +136,7 @@ export default {
   }
 }
 .gap {
-  width: 100%;
-  margin: 0 -0.18rem;
+  margin:0 -0.18rem;
   height: 0.1rem;
   background: $content-bgColor;
 }
