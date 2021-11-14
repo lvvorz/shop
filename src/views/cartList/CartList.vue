@@ -1,5 +1,5 @@
 <template>
-    cartList 未完成...
+    cartList 未开发。。
 </template>
 
 <script>

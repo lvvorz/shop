@@ -12,6 +12,11 @@ const routes = [
     name: 'CartList',
     // 异步加载
     component: () => import('../views/cartList/CartList')
+  },{
+    path: '/orderList',
+    name: 'OrderList',
+    // 异步加载
+    component: () => import('../views/orderList/OrderList')
   },
   {
     path: '/orderConfirm/:id',

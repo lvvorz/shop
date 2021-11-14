@@ -114,8 +114,9 @@ export default {
     border: 1px solid $content-notice-fontColor;
     border-radius: 6px;
     &__content {
-      padding: 0 0.05rem;
-      line-height: 0.48rem;
+      box-sizing: border-box;
+      padding: 0.12rem;
+      line-height: 0.22rem;
       width: 100%;
       background: none;
       font-size: 0.16rem;
