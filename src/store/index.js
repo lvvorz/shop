@@ -19,6 +19,8 @@ const getLocalCartList = () => {
 export default createStore({
   state: {
     cartList: getLocalCartList(),
+    // 第一层为商辅ID
+    // 第二层为商品ID
     // cartList: {
     // shopId: {
     //   shopName: '沃尔玛',

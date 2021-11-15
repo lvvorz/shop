@@ -11,6 +11,7 @@
         />
       </div>
     </div>
+    <!-- v-if="item.imgUrl"当图片加载完才显示相关组件 -->
     <ShopInfo :item="item" :hiderBorder="true" v-if="item.imgUrl" />
     <Content :shopName="item.name"/>
     <Cart />

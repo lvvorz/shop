@@ -101,7 +101,7 @@ const useCurrentListEffect = (currentTab, shopId) => {
     }
   };
 
-  //监听若变化则执行函数
+  //监听Tab变化则执行函数
   watchEffect(() => {
     getContentData();
   });
