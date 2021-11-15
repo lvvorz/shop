@@ -1,4 +1,4 @@
-##笔记
+##记录
 ```
 npm install normalize.css
 ```
@@ -50,5 +50,3 @@ http://fastmock.site/mock/ae8e9031947a302fed5f92425995aa19/jd/api/user/login
 ###使用json格式
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-###
-promise还不是很会
